@@ -11,17 +11,23 @@ use Tests\TestCase;
 
 class PlantsTest extends TestCase
 {
-    public function test_plant_list_can_be_retrieved()
-    {
+    protected $testUser;
+    protected $testUserToken;
+
+    public function setUp() : void {
+
+        parent::setUp();
         // create user
-        $user1 = User::factory()->create();
+        $this->testUser = User::factory()->create();
 
         // create access token
-        $token = $user1->createToken('authtoken')->plainTextToken;
-
+        $this->testUserToken = $this->testUser->createToken('authtoken')->plainTextToken;
+    }
+    public function test_plant_list_can_be_retrieved()
+    {
         // get request to /plants containing token
         $response = $this->withHeaders([
-            'Authorization' => 'Bearer ' . $token,
+            'Authorization' => 'Bearer ' . $this->testUserToken,
             'Accept' => 'application/json'
         ])
             ->get('api/plants');
@@ -40,17 +46,11 @@ class PlantsTest extends TestCase
 
     public function test_single_plant_can_be_retrieved()
     {
-        // create a user
-        $user = User::factory()->create();
-
-        // create access token
-        $token = $user->createToken('authtoken')->plainTextToken;
-
         $plant = Plant::first();
 
         // get request to /users containing token
         $response = $this->withHeaders([
-            'Authorization' => 'Bearer ' . $token,
+            'Authorization' => 'Bearer ' . $this->testUserToken,
             'Accept' => 'application/json'
         ])
             ->get('api/plants/' . $plant->id);

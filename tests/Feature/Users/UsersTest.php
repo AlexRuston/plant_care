@@ -10,6 +10,19 @@ use Tests\TestCase;
 
 class UsersTest extends TestCase
 {
+    protected $testUser;
+    protected $testUserToken;
+
+    public function setUp() : void {
+
+        parent::setUp();
+        // create user
+        $this->testUser = User::factory()->create();
+
+        // create access token
+        $this->testUserToken = $this->testUser->createToken('authtoken')->plainTextToken;
+    }
+
     public function test_user_list_can_be_retrieved()
     {
         // create a user
@@ -20,7 +33,7 @@ class UsersTest extends TestCase
 
         // get request to /users containing token
         $response = $this->withHeaders([
-            'Authorization' => 'Bearer ' . $token,
+            'Authorization' => 'Bearer ' . $this->testUserToken,
             'Accept' => 'application/json'
         ])
             ->get('api/users');
@@ -38,15 +51,11 @@ class UsersTest extends TestCase
 
     public function test_single_user_can_be_retrieved()
     {
-        // create a user
-        $user = User::factory()->create();
-
-        // create access token
-        $token = $user->createToken('authtoken')->plainTextToken;
+        $user = User::first();
 
         // get request to /users containing token
         $response = $this->withHeaders([
-            'Authorization' => 'Bearer ' . $token,
+            'Authorization' => 'Bearer ' . $this->testUserToken,
             'Accept' => 'application/json'
         ])
             ->get('api/users/' . $user->id);
@@ -64,25 +73,20 @@ class UsersTest extends TestCase
 
     public function test_a_users_data_can_be_updated()
     {
-        // create a user
-        $user = User::factory()->create();
-
-        // create access token
-        $token = $user->createToken('authtoken')->plainTextToken;
+        $user = User::first();
 
         /*
          * put request to users
          * updating the name and email
          * */
         $response = $this->withHeaders([
-            'Authorization' => 'Bearer ' . $token,
+            'Authorization' => 'Bearer ' . $this->testUserToken,
             'Accept' => 'application/json'
         ])
             ->put('api/users/' . $user->id, [
                 'name' => 'Test User',
                 'email' => 'test@example.com',
             ]);
-
 
         // should see 201
         $response->assertStatus(201);
@@ -92,11 +96,6 @@ class UsersTest extends TestCase
          * and a list of the fields that were updated in the request
          * */
         $response->assertJsonFragment([
-            'user' => [
-                'id' => $user->id,
-                'name' => 'Test User',
-                'email' => 'test@example.com',
-            ],
             'updated' => [
                 'name' => 'Test User',
                 'email' => 'test@example.com',

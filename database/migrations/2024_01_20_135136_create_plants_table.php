@@ -13,6 +13,10 @@ return new class extends Migration
     {
         Schema::create('plants', function (Blueprint $table) {
             $table->id();
+            $table->string('name');
+            $table->string('latin_name');
+            $table->integer('water_frequency');
+            $table->integer('sunlight');
             $table->timestamps();
         });
     }

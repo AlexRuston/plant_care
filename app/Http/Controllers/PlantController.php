@@ -1,18 +1,22 @@
 <?php
-
+/**
+ * Test file(s):
+ * PlantTest.php
+ */
 namespace App\Http\Controllers;
 
-use App\Models\Plants;
+use App\Http\Resources\PlantResource;
+use App\Models\Plant;
 use Illuminate\Http\Request;
 
-class PlantsController extends Controller
+class PlantController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        //
+        return response(PlantResource::collection(Plant::all()), 200);
     }
 
     /**
@@ -34,7 +38,7 @@ class PlantsController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Plants $plants)
+    public function show(Plant $plants)
     {
         //
     }
@@ -42,7 +46,7 @@ class PlantsController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Plants $plants)
+    public function edit(Plant $plants)
     {
         //
     }
@@ -50,7 +54,7 @@ class PlantsController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Plants $plants)
+    public function update(Request $request, Plant $plants)
     {
         //
     }
@@ -58,7 +62,7 @@ class PlantsController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Plants $plants)
+    public function destroy(Plant $plants)
     {
         //
     }

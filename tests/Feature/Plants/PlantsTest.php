@@ -67,4 +67,21 @@ class PlantsTest extends TestCase
             'sunlight' => 'Partial Shade',
         ], $strict = false);
     }
+
+    public function test_a_plant_can_be_created()
+    {
+        // get request to /users containing token
+        $response = $this->withHeaders([
+            'Authorization' => 'Bearer ' . $this->testUserToken,
+            'Accept' => 'application/json'
+        ])
+            ->post('api/plants/', [
+                'name' => 'Test Plant',
+                'latin_name' => 'Testicus Planticus',
+                'water_frequency' => 2,
+                'sunlight' => 0,
+            ]);
+
+        $response->assertCreated();
+    }
 }

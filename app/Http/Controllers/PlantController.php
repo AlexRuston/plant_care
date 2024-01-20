@@ -8,6 +8,7 @@ namespace App\Http\Controllers;
 use App\Http\Resources\PlantResource;
 use App\Models\Plant;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
 
 class PlantController extends Controller
 {
@@ -24,7 +25,28 @@ class PlantController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        // validate posted fields
+        $request->validate([
+            'name' => ['required', 'string', 'max:255'],
+            'latin_name' => ['required', 'string', 'max:255', 'unique:plants'],
+            'water_frequency' => ['required', 'integer', 'between:0,5'],
+            'sunlight' => ['required', 'integer', 'between:0,5'],
+        ]);
+
+        // create Plant
+        $plant = Plant::create([
+            'name' => $request->name,
+            'latin_name' => $request->latin_name,
+            'water_frequency' => $request->water_frequency,
+            'sunlight' => $request->sunlight,
+        ]);
+
+        // build return array
+        $response = [
+            'plant' => $plant,
+        ];
+
+        return response($response, 201);
     }
 
     /**

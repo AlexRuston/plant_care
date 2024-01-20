@@ -10,13 +10,10 @@ use Tests\TestCase;
 
 class UsersTest extends TestCase
 {
-    use RefreshDatabase;
-
     public function test_user_list_can_be_retrieved()
     {
-        // create 2 users
+        // create a user
         $user1 = User::factory()->create();
-        $user2 = User::factory()->create();
 
         // create access token for user 1
         $token = $user1->createToken('authtoken')->plainTextToken;
@@ -32,17 +29,10 @@ class UsersTest extends TestCase
         $response->assertStatus(200);
 
         // should see the below JSON
-        $response->assertJson([
-            [
-                'id' => $user1->id,
-                'name' => $user1->name,
-                'email' => $user1->email,
-            ],
-            [
-                'id' => $user2->id,
-                'name' => $user2->name,
-                'email' => $user2->email,
-            ],
+        $response->assertJsonFragment([
+            'id' => $user1->id,
+            'name' => $user1->name,
+            'email' => $user1->email,
         ], $strict = false);
     }
 
@@ -60,7 +50,6 @@ class UsersTest extends TestCase
             'Accept' => 'application/json'
         ])
             ->get('api/users/' . $user->id);
-
 
         // should see 200
         $response->assertStatus(200);

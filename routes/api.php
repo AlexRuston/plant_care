@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -22,5 +23,10 @@ Route::group(['middleware' => 'auth:sanctum'], function ()
     Route::post('/logout',[\App\Http\Controllers\AuthController::class, 'logout']);
 
     Route::apiResource('users', \App\Http\Controllers\UserController::class);
-    Route::apiResource('plants', \App\Http\Controllers\PlantController::class);
+    Route::apiResource('plants', \App\Http\Controllers\PlantController::class);#
+
+    Route::get('/playground', function () {
+        $plant = \App\Models\Plant::find(1);
+        dd($plant);
+    });
 });

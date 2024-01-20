@@ -20,14 +20,6 @@ class PlantController extends Controller
     }
 
     /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
      * Store a newly created resource in storage.
      */
     public function store(Request $request)
@@ -38,23 +30,15 @@ class PlantController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Plant $plants)
+    public function show(Plant $plant)
     {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Plant $plants)
-    {
-        //
+        return response(PlantResource::make($plant), 200);
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Plant $plants)
+    public function update(Request $request, Plant $plant)
     {
         //
     }
@@ -62,7 +46,7 @@ class PlantController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Plant $plants)
+    public function destroy(Plant $plant)
     {
         //
     }

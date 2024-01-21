@@ -110,7 +110,7 @@ class UserController extends Controller
             'updated' => $user->getChanges(),
         ];
 
-        return response($returnArray, 201);
+        return response($returnArray, 200);
     }
 
     /**

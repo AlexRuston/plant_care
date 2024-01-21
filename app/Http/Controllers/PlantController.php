@@ -8,6 +8,7 @@ namespace App\Http\Controllers;
 use App\Http\Resources\PlantResource;
 use App\Models\Plant;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Hash;
 
 class PlantController extends Controller
@@ -21,7 +22,10 @@ class PlantController extends Controller
     }
 
     /**
-     * Store a newly created resource in storage.
+     * Update the specified resource from storage.
+     *
+     * @param Request $plant
+     * @return Response
      */
     public function store(Request $request)
     {
@@ -45,7 +49,10 @@ class PlantController extends Controller
     }
 
     /**
-     * Display the specified resource.
+     * Update the specified resource from storage.
+     *
+     * @param Plant $plant
+     * @return Response
      */
     public function show(Plant $plant)
     {
@@ -53,7 +60,11 @@ class PlantController extends Controller
     }
 
     /**
-     * Update the specified resource in storage.
+     * Update the specified resource from storage.
+     *
+     * @param Request $plant
+     * @param Plant $plant
+     * @return Response
      */
     public function update(Request $request, Plant $plant)
     {
@@ -80,14 +91,21 @@ class PlantController extends Controller
             'updated' => $plant->getChanges(),
         ];
 
-        return response($returnArray, 201);
+        return response($returnArray, 200);
     }
 
     /**
      * Remove the specified resource from storage.
+     *
+     * @param Plant $plant
+     * @return Response
      */
     public function destroy(Plant $plant)
     {
-        //
+        $plant->delete();
+
+        return response([
+            'message' => 'Plant deleted successfully',
+        ], 200);
     }
 }

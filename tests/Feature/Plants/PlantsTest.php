@@ -48,7 +48,7 @@ class PlantsTest extends TestCase
     {
         $plant = Plant::first();
 
-        // get request to /users containing token
+        // get request to /plants containing token
         $response = $this->withHeaders([
             'Authorization' => 'Bearer ' . $this->testUserToken,
             'Accept' => 'application/json'
@@ -70,7 +70,7 @@ class PlantsTest extends TestCase
 
     public function test_a_plant_can_be_created()
     {
-        // get request to /users containing token
+        // get request to /plants containing token
         $response = $this->withHeaders([
             'Authorization' => 'Bearer ' . $this->testUserToken,
             'Accept' => 'application/json'
@@ -98,7 +98,7 @@ class PlantsTest extends TestCase
         // get the plant we'll update
         $plant = Plant::all()->last();
 
-        // get request to /users containing token
+        // get request to /plants] containing token
         $response = $this->withHeaders([
             'Authorization' => 'Bearer ' . $this->testUserToken,
             'Accept' => 'application/json'
@@ -108,7 +108,7 @@ class PlantsTest extends TestCase
                 'latin_name' => 'Updaticus Planticilius',
             ]);
 
-        $response->assertCreated();
+        $response->assertStatus(200);
 
         // should see the below JSON
         $response->assertJsonFragment([
@@ -124,7 +124,7 @@ class PlantsTest extends TestCase
         // get the plant we'll update
         $plant = Plant::all()->last();
 
-        // get request to /users containing token
+        // get request to /plants containing token
         $response = $this->withHeaders([
             'Authorization' => 'Bearer ' . $this->testUserToken,
             'Accept' => 'application/json'
@@ -139,6 +139,26 @@ class PlantsTest extends TestCase
         // should see the below JSON
         $response->assertJsonFragment([
             'message' => 'The water frequency field must be an integer.',
+        ]);
+    }
+
+    public function test_a_plant_can_be_deleted()
+    {
+        // get the last plant
+        $plant = Plant::all()->last();
+
+        // get request to /users containing token
+        $response = $this->withHeaders([
+            'Authorization' => 'Bearer ' . $this->testUserToken,
+            'Accept' => 'application/json'
+        ])
+            ->delete('api/plants/' . $plant->id);
+
+        $response->assertStatus(200);
+
+        // should see the below JSON
+        $response->assertJsonFragment([
+            'message' => 'Plant deleted successfully',
         ]);
     }
 }

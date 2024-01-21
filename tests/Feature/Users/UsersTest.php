@@ -89,7 +89,7 @@ class UsersTest extends TestCase
             ]);
 
         // should see 201
-        $response->assertStatus(201);
+        $response->assertStatus(200);
 
         /*
          * updating a user returns us the new user model

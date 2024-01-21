@@ -75,7 +75,7 @@ class PlantsTest extends TestCase
             'Authorization' => 'Bearer ' . $this->testUserToken,
             'Accept' => 'application/json'
         ])
-            ->post('api/plants/', [
+            ->post('api/plants', [
                 'name' => 'Test Plant',
                 'latin_name' => 'Testicus Planticus',
                 'water_frequency' => 2,
@@ -83,5 +83,62 @@ class PlantsTest extends TestCase
             ]);
 
         $response->assertCreated();
+
+        // should see the below JSON
+        $response->assertJsonFragment([
+            'name' => 'Test Plant',
+            'latin_name' => 'Testicus Planticus',
+            'water_frequency' => '2 days',
+            'sunlight' => 'Dark',
+        ]);
+    }
+
+    public function test_a_plant_can_be_updated()
+    {
+        // get the plant we'll update
+        $plant = Plant::all()->last();
+
+        // get request to /users containing token
+        $response = $this->withHeaders([
+            'Authorization' => 'Bearer ' . $this->testUserToken,
+            'Accept' => 'application/json'
+        ])
+            ->put('api/plants/' . $plant->id, [
+                'name' => 'Updated Plant',
+                'latin_name' => 'Updaticus Planticilius',
+            ]);
+
+        $response->assertCreated();
+
+        // should see the below JSON
+        $response->assertJsonFragment([
+            "updated" => [
+                'name' => 'Updated Plant',
+                'latin_name' => 'Updaticus Planticilius',
+            ],
+        ]);
+    }
+
+    public function test_a_plant_update_validation_works()
+    {
+        // get the plant we'll update
+        $plant = Plant::all()->last();
+
+        // get request to /users containing token
+        $response = $this->withHeaders([
+            'Authorization' => 'Bearer ' . $this->testUserToken,
+            'Accept' => 'application/json'
+        ])
+            ->put('api/plants/' . $plant->id, [
+                'water_frequency' => 'string',
+                'sunlight' => true,
+            ]);
+
+        $response->assertStatus(422);
+
+        // should see the below JSON
+        $response->assertJsonFragment([
+            'message' => 'The water frequency field must be an integer.',
+        ]);
     }
 }

@@ -96,9 +96,9 @@ class UsersTest extends TestCase
          * and a list of the fields that were updated in the request
          * */
         $response->assertJsonFragment([
-            'updated' => [
-                'name' => 'Test User',
-                'email' => 'test@example.com',
+            "updated" => [
+                "email" => "test@example.com",
+                "name" => "Test User"
             ],
         ]);
     }

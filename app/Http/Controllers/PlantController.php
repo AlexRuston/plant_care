@@ -26,27 +26,22 @@ class PlantController extends Controller
     public function store(Request $request)
     {
         // validate posted fields
-        $request->validate([
+        $validated = $request->validate([
             'name' => ['required', 'string', 'max:255'],
             'latin_name' => ['required', 'string', 'max:255', 'unique:plants'],
-            'water_frequency' => ['required', 'integer', 'between:0,5'],
+            'water_frequency' => ['required', 'integer', 'between:0,100'],
             'sunlight' => ['required', 'integer', 'between:0,5'],
         ]);
 
         // create Plant
-        $plant = Plant::create([
-            'name' => $request->name,
-            'latin_name' => $request->latin_name,
-            'water_frequency' => $request->water_frequency,
-            'sunlight' => $request->sunlight,
-        ]);
+        $plant = Plant::create($validated);
 
         // build return array
         $response = [
             'plant' => $plant,
         ];
 
-        return response($response, 201);
+        return response(PlantResource::make($plant), 201);
     }
 
     /**
@@ -62,7 +57,30 @@ class PlantController extends Controller
      */
     public function update(Request $request, Plant $plant)
     {
-        //
+        // validate posted fields
+        $validated = $request->validate([
+            'name' => ['string', 'max:255'],
+            'latin_name' => ['string', 'max:255', 'unique:plants'],
+            'water_frequency' => ['integer', 'between:0,100'],
+            'sunlight' => ['integer', 'between:0,5'],
+        ]);
+
+        // create array of values to update
+        $updateArray = $validated;
+
+        // add updated_at field
+        $updateArray['updated_at'] = date('Y-m-d H:i:s');
+
+        // Persist
+        $plant->update($updateArray);
+
+        // build return array
+        $returnArray = [
+            'user' => PlantResource::make($plant),
+            'updated' => $plant->getChanges(),
+        ];
+
+        return response($returnArray, 201);
     }
 
     /**

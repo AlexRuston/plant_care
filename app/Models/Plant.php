@@ -9,6 +9,13 @@ class Plant extends Model
 {
     use HasFactory;
 
+    /*
+     * show which users own these plants
+     * */
+    function users(){
+        return $this->belongsToMany(User::class, 'my_plants', 'plant_id', 'user_id');
+    }
+
     /**
      * switch the water_frequency integer to a string
      *

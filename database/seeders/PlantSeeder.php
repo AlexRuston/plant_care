@@ -40,7 +40,7 @@ class PlantSeeder extends Seeder
                 'sunlight' => 3,
             ],
             4 => [
-                'name' => 'Clustered field sedge',
+                'name' => 'Clustered Field Sedge',
                 'latin_name' => 'Carex Praegracilis',
                 'water_frequency' => 2,
                 'sunlight' => 4,

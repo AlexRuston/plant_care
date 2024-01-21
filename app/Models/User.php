@@ -42,4 +42,11 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
     ];
+
+    /*
+     * show which plants this user owns
+     * */
+    function plants(){
+        return $this->belongsToMany(Plant::class, 'my_plants', 'user_id', 'plant_id');
+    }
 }

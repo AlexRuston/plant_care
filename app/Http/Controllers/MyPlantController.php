@@ -5,8 +5,10 @@
  */
 namespace App\Http\Controllers;
 
+use App\Http\Resources\MyPlantResource;
 use App\Models\MyPlant;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class MyPlantController extends Controller
 {
@@ -15,7 +17,7 @@ class MyPlantController extends Controller
      */
     public function index()
     {
-        //
+        return response(MyPlantResource::collection(Auth::user()->plants), 200);
     }
 
     /**

@@ -18,7 +18,9 @@ abstract class TestCase extends BaseTestCase
     {
         parent::setUp();
 
-        // seed the database
-        $this->seed();
+        /*
+         * swapped $this->seed for Artisan so I could pass the fresh command into migrate
+         * */
+        Artisan::call('migrate:fresh --seed');
     }
 }

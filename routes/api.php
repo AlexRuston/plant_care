@@ -3,6 +3,7 @@
 use App\Models\Plant;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -28,7 +29,9 @@ Route::group(['middleware' => 'auth:sanctum'], function ()
     Route::apiResource('my-plants', \App\Http\Controllers\MyPlantController::class);
 
     Route::get('/playground', function () {
-        $users = User::all();
-        dd(User::all()->count());
+
+        $user = Auth::user();
+        dd($user->plants);
+
     });
 });

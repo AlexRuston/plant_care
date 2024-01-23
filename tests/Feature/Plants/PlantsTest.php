@@ -23,6 +23,7 @@ class PlantsTest extends TestCase
         // create access token
         $this->testUserToken = $this->testUser->createToken('authtoken')->plainTextToken;
     }
+
     public function test_plant_list_can_be_retrieved()
     {
         // get request to /plants containing token

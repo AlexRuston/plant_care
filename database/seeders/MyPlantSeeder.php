@@ -3,6 +3,7 @@
 namespace Database\Seeders;
 
 use App\Models\MyPlant;
+use App\Models\User;
 use Faker\Factory as Faker;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
@@ -15,6 +16,12 @@ class MyPlantSeeder extends Seeder
     public function run(): void
     {
         $faker = Faker::create();
+
+        /*
+         * we'll get a count of the users to throw into the rand() on the user_id column
+         * that way all of the users should have some plants
+         * */
+        $userCount = User::all()->count();
 
         /*
          * we'll add 50 records to the db

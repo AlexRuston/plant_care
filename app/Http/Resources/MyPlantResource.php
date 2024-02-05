@@ -16,11 +16,8 @@ class MyPlantResource extends JsonResource
     {
         $returnArray = [
             'id' => $this->id,
-            'name' => $this->name,
-            'latin_name' => $this->latin_name,
-            'water_frequency' => $this->water_frequency,
-            'sunlight' => $this->sunlight,
-            'last_watered' => $this->pivot->last_watered,
+            'plant' => PlantResource::make($this->plant),
+            'last_watered' => $this->last_watered,
         ];
 
         return $returnArray;

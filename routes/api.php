@@ -31,7 +31,12 @@ Route::group(['middleware' => 'auth:sanctum'], function ()
     Route::get('/playground', function () {
 
         $user = Auth::user();
-        dd($user->plants);
+
+        dump($user->plants);
+
+        foreach($user->plants as $plant){
+            dd($plant->plant);
+        }
 
     });
 });

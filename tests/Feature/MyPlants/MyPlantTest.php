@@ -37,9 +37,8 @@ class MyPlantTest extends TestCase
 
         // should see the below JSON
         $response->assertJsonFragment([
-            'name' => $this->testUser->plants[0]->name,
-            'latin_name' => $this->testUser->plants[0]->latin_name,
-            'last_watered' => $this->testUser->plants[0]->pivot->last_watered,
+            'id' => $this->testUser->plants[0]->id,
+            'last_watered' => $this->testUser->plants[0]->last_watered,
         ]);
     }
 }

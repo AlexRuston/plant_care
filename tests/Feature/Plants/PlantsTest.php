@@ -113,10 +113,8 @@ class PlantsTest extends TestCase
 
         // should see the below JSON
         $response->assertJsonFragment([
-            "updated" => [
-                'name' => 'Updated Plant',
-                'latin_name' => 'Updaticus Planticilius',
-            ],
+            'latin_name' => 'Updaticus Planticilius',
+            'name' => 'Updated Plant',
         ]);
     }
 

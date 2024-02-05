@@ -47,6 +47,6 @@ class User extends Authenticatable
      * show which plants this user owns
      * */
     function plants(){
-        return $this->belongsToMany(Plant::class, 'my_plants')->withPivot('last_watered');
+        return $this->hasMany(MyPlant::class);
     }
 }

@@ -32,7 +32,7 @@ Route::group(['middleware' => 'auth:sanctum'], function ()
 
         $user = Auth::user();
 
-        dump($user->plants);
+        dd($user->plants);
 
         foreach($user->plants as $plant){
             dd($plant->plant);

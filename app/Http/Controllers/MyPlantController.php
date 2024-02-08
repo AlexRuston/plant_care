@@ -33,6 +33,9 @@ class MyPlantController extends Controller
      */
     public function show(MyPlant $myPlant)
     {
+        if (Auth::user()->cannot('view', $myPlant)) {
+            abort(403);
+        }
         return response(MyPlantResource::make($myPlant), 200);
     }
 

@@ -1,4 +1,8 @@
 <?php
+/**
+ * Policy file
+ * MyPlantPolicy.php
+ */
 
 namespace App\Models;
 

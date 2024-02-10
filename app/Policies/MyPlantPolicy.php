@@ -23,7 +23,7 @@ class MyPlantPolicy
     {
         return $user->id === $myPlant->user_id
             ? Response::allow()
-            : Response::deny('You do not own this post.');
+            : Response::deny('You do not own this plant.');
     }
 
     /**

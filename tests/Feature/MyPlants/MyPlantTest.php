@@ -16,9 +16,6 @@ class MyPlantTest extends TestCase
 
         parent::setUp();
 
-        // disable requirement for auth token
-        $this->withoutMiddleware();
-
         // create user
         $this->testUser = User::find(1);
     }
@@ -28,17 +25,32 @@ class MyPlantTest extends TestCase
         // get request to /my-plants
         $response = $this->actingAs($this->testUser)
             ->withHeaders([
-            'Accept' => 'application/json'
+                'Authorization' => 'Bearer ' . $this->testUserToken,
+                'Accept' => 'application/json'
         ])
             ->get('api/my-plants');
+
+        // should see 200
+        $response->assertStatus(200);
+    }
+
+    public function test_a_single_users_plant_can_be_retrieved()
+    {
+        // get request to /my-plants
+        $response = $this->actingAs($this->testUser)
+            ->withHeaders([
+                'Authorization' => 'Bearer ' . $this->testUserToken,
+                'Accept' => 'application/json'
+        ])
+            ->get('api/my-plants/' . $this->testUser->plants[1]->id);
 
         // should see 200
         $response->assertStatus(200);
 
         // should see the below JSON
         $response->assertJsonFragment([
-            'id' => $this->testUser->plants[0]->id,
-            'last_watered' => $this->testUser->plants[0]->last_watered,
+            'id' => $this->testUser->plants[1]->id,
+            'last_watered' => $this->testUser->plants[1]->last_watered,
         ]);
     }
 }

@@ -29,9 +29,11 @@ class MyPlantPolicy
     /**
      * Determine whether the user can update the model.
      */
-    public function update(User $user, MyPlant $myPlant): bool
+    public function update(User $user, MyPlant $myPlant): Response
     {
-        //
+        return $user->id === $myPlant->user_id
+            ? Response::allow()
+            : Response::deny('You do not own this plant.');
     }
 
     /**

@@ -88,7 +88,7 @@ class PlantController extends Controller
 
         // build return array
         $returnArray = [
-            'user' => PlantResource::make($plant),
+            'plant' => PlantResource::make($plant),
             'updated' => $plant->getChanges(),
         ];
 

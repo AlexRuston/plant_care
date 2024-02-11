@@ -55,9 +55,28 @@ class MyPlantTest extends TestCase
         ]);
     }
 
+    public function test_a_user_cannot_retrieve_another_users_plant()
+    {
+        /*
+         * we need another user so we can get the id of one of their my_plants
+         * then try to retrieve it acting as another user
+         * */
+        $user = User::find(2);
+
+        // get request to /my-plants
+        $response = $this->actingAs($this->testUser)
+            ->withHeaders([
+                'Authorization' => 'Bearer ' . $this->testUserToken,
+                'Accept' => 'application/json'
+        ])
+            ->get('api/my-plants/' . $user->plants[1]->id);
+
+        // should see 403
+        $response->assertStatus(403);
+    }
+
     public function test_validation_on_passing_a_user_id()
     {
-        // get request to /plants containing token
         $response = $this->actingAs($this->testUser)
             ->withHeaders([
                 'Authorization' => 'Bearer ' . $this->testUserToken,
@@ -71,13 +90,12 @@ class MyPlantTest extends TestCase
 
         // should see the below JSON
         $response->assertJsonFragment([
-            'message' => 'Bad request. You cannot pass a user_id because you cannot create a record against another user',
+            'message' => 'You cannot pass a user_id because you cannot create a record against another user',
         ]);
     }
 
     public function test_validation_on_plant_id_must_exist()
     {
-        // get request to /plants containing token
         $response = $this->actingAs($this->testUser)
             ->withHeaders([
                 'Authorization' => 'Bearer ' . $this->testUserToken,
@@ -97,7 +115,6 @@ class MyPlantTest extends TestCase
 
     public function test_a_user_can_create_a_my_plant()
     {
-        // get request to /plants containing token
         $response = $this->actingAs($this->testUser)
             ->withHeaders([
                 'Authorization' => 'Bearer ' . $this->testUserToken,
@@ -113,6 +130,73 @@ class MyPlantTest extends TestCase
         $response->assertJsonFragment([
             'message' => 'plant added to user',
             'name' => Plant::find(2)->name,
+        ]);
+    }
+
+    public function test_a_user_can_edit_a_my_plant()
+    {
+        $response = $this->actingAs($this->testUser)
+            ->withHeaders([
+                'Authorization' => 'Bearer ' . $this->testUserToken,
+                'Accept' => 'application/json'
+            ])
+            ->put('api/my-plants/' . $this->testUser->plants[0]->id, [
+                'last_watered' => date("Y-m-d H:i:s"),
+            ]
+        );
+
+        $response->assertStatus(200);
+
+        // should see the below JSON
+        $response->assertJsonFragment([
+            'last_watered' => date("Y-m-d H:i:s"),
+        ]);
+    }
+
+    public function test_a_user_cannot_update_another_users_my_plant()
+    {
+        /*
+         * we need another user so we can get the id of one of their my_plants
+         * then try to retrieve it acting as another user
+         * */
+        $user = User::find(2);
+
+        $response = $this->actingAs($this->testUser)
+            ->withHeaders([
+                'Authorization' => 'Bearer ' . $this->testUserToken,
+                'Accept' => 'application/json'
+            ])
+            ->put('api/my-plants/' . $user->plants[0]->id, [
+                'last_watered' => date("Y-m-d H:i:s"),
+            ]
+        );
+
+        $response->assertStatus(403);
+    }
+
+    public function test_last_watered_field_must_be_date()
+    {
+        /*
+         * we need another user so we can get the id of one of their my_plants
+         * then try to retrieve it acting as another user
+         * */
+        $user = User::find(2);
+
+        $response = $this->actingAs($this->testUser)
+            ->withHeaders([
+                'Authorization' => 'Bearer ' . $this->testUserToken,
+                'Accept' => 'application/json'
+            ])
+            ->put('api/my-plants/' . $this->testUser->plants[0]->id, [
+                'last_watered' => 1,
+            ]
+        );
+
+        $response->assertStatus(422);
+
+        // should see the below JSON
+        $response->assertJsonFragment([
+            'message' => 'The last watered field must be a valid date.',
         ]);
     }
 }

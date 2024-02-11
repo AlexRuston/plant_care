@@ -32,7 +32,7 @@ class MyPlantController extends Controller
         if($request->has('user_id')){
             // Build return array
             $response = [
-                'message' => 'Bad request. You cannot pass a user_id because you cannot create a record against another user',
+                'message' => 'You cannot pass a user_id because you cannot create a record against another user',
             ];
 
             return response($response, 401);
@@ -67,18 +67,46 @@ class MyPlantController extends Controller
      */
     public function show(MyPlant $myPlant)
     {
+        // guard against a user guessing an id and retrieving another users my_plant
         if (Auth::user()->cannot('view', $myPlant)) {
             abort(403);
         }
+
         return response(MyPlantResource::make($myPlant), 200);
     }
 
     /**
      * Update the specified resource in storage.
+     * this will probably only be used to update when the plant was last_watered
      */
     public function update(Request $request, MyPlant $myPlant)
     {
-        //
+        // guard against a user updating another users my_plant
+        if (Auth::user()->cannot('update', $myPlant)) {
+            abort(403);
+        }
+
+        // validate posted fields
+        $validated = $request->validate([
+            'last_watered' => ['date'],
+        ]);
+
+        // create array of values to update
+        $updateArray = $validated;
+
+        // add updated_at field
+        $updateArray['updated_at'] = date('Y-m-d H:i:s');
+
+        // update MyPlant
+        $myPlant->update($updateArray);
+
+        // build return array
+        $response = [
+            'my-plant' => MyPlantResource::make($myPlant),
+            'updated' => $myPlant->getChanges(),
+        ];
+
+        return response($response, 200);
     }
 
     /**

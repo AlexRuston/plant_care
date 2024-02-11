@@ -42,10 +42,11 @@ class PlantController extends Controller
 
         // build return array
         $response = [
-            'plant' => $plant,
+            'message' => 'plant added',
+            'plant' => PlantResource::make($plant),
         ];
 
-        return response(PlantResource::make($plant), 201);
+        return response($response, 201);
     }
 
     /**

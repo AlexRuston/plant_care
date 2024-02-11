@@ -54,7 +54,8 @@ class UserController extends Controller
 
         // Build return array
         $response = [
-            'user' => $user,
+            'message' => 'user added',
+            'user' => UserResource::make($user),
             'token' => $token
         ];
 

@@ -176,12 +176,6 @@ class MyPlantTest extends TestCase
 
     public function test_last_watered_field_must_be_date()
     {
-        /*
-         * we need another user so we can get the id of one of their my_plants
-         * then try to retrieve it acting as another user
-         * */
-        $user = User::find(2);
-
         $response = $this->actingAs($this->testUser)
             ->withHeaders([
                 'Authorization' => 'Bearer ' . $this->testUserToken,

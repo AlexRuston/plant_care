@@ -29,14 +29,6 @@ Route::group(['middleware' => 'auth:sanctum'], function ()
     Route::apiResource('my-plants', \App\Http\Controllers\MyPlantController::class);
 
     Route::get('/playground', function () {
-
-        $user = Auth::user();
-
-        dd($user->plants);
-
-        foreach($user->plants as $plant){
-            dd($plant->plant);
-        }
-
+        //
     });
 });

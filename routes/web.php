@@ -12,6 +12,9 @@ use Illuminate\Support\Facades\Route;
 | be assigned to the "web" middleware group. Make something great!
 |
 */
+Route::get('/notification', function () {
+    // https://laravel.com/docs/10.x/notifications#previewing-mail-notifications
+});
 
 Route::get('/', function () {
     return view('welcome');

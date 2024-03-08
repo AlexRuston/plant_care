@@ -114,6 +114,15 @@ class MyPlantController extends Controller
      */
     public function destroy(MyPlant $myPlant)
     {
-        //
+        // guard against a user deleting another users my_plant
+        if (Auth::user()->cannot('delete', $myPlant)) {
+            abort(403);
+        }
+
+        $myPlant->delete();
+
+        return response([
+            'message' => 'Plant deleted successfully',
+        ], 200);
     }
 }

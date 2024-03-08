@@ -193,4 +193,39 @@ class MyPlantTest extends TestCase
             'message' => 'The last watered field must be a valid date.',
         ]);
     }
+
+    public function test_a_my_plant_can_be_deleted()
+    {
+        $response = $this->actingAs($this->testUser)
+            ->withHeaders([
+                'Authorization' => 'Bearer ' . $this->testUserToken,
+                'Accept' => 'application/json'
+            ])
+            ->delete('api/my-plants/' . $this->testUser->plants[0]->id);
+
+        $response->assertStatus(200);
+
+        // should see the below JSON
+        $response->assertJsonFragment([
+            'message' => 'Plant deleted successfully',
+        ]);
+    }
+
+    public function test_a_my_plant_cannot_delete_another_users_my_plant()
+    {
+        /*
+         * we need another user so we can get the id of one of their my_plants
+         * then try to delete it acting as another user
+         * */
+        $user = User::find(2);
+
+        $response = $this->actingAs($this->testUser)
+            ->withHeaders([
+                'Authorization' => 'Bearer ' . $this->testUserToken,
+                'Accept' => 'application/json'
+            ])
+            ->delete('api/my-plants/' . $user->plants[0]->id);
+
+        $response->assertStatus(403);
+    }
 }

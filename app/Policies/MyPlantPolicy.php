@@ -39,8 +39,10 @@ class MyPlantPolicy
     /**
      * Determine whether the user can delete the model.
      */
-    public function delete(User $user, MyPlant $myPlant): bool
+    public function delete(User $user, MyPlant $myPlant): Response
     {
-        //
+        return $user->id === $myPlant->user_id
+            ? Response::allow()
+            : Response::deny('You do not own this plant.');
     }
 }
